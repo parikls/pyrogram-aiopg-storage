@@ -1,5 +1,5 @@
 __author__ = 'Dmytro Smyk'
-__version__ = '0.1'
+__version__ = '0.2'
 
 import time
 from enum import Enum
@@ -182,12 +182,21 @@ class PostgreSQLStorage(Storage):
         if not peers:
             return
 
-        # enrich with timestamp
         now = int(time.time())
-        peers = [tuple(chain(peer, (now, ))) for peer in peers]
+        deduplicated_peers = []
+        seen_ids = set()
+
+        # deduplicate peers to avoid possible `CardinalityViolation` error
+        for peer in peers:
+            peer_id, *_ = peer
+            if peer_id in seen_ids:
+                continue
+            seen_ids.add(peer_id)
+            # enrich peer with timestamp and append
+            deduplicated_peers.append(tuple(chain(peer, (now,))))
 
         # construct insert query
-        insert_query = insert(self._t_peers).values(peers)
+        insert_query = insert(self._t_peers).values(deduplicated_peers)
         final_query = (
             insert_query.on_conflict_do_update(
                 constraint=self._t_peers.primary_key.name,

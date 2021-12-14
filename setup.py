@@ -1,6 +1,6 @@
 import pathlib
 import re
-from distutils.core import setup
+from setuptools import setup
 
 here = pathlib.Path(__file__).parent
 init = here / "pyrogram_aiopg_storage" / "__init__.py"
@@ -21,6 +21,7 @@ setup(
     version=version,
     description='aiopg storage for pyrogram',
     long_description=README,
+    long_description_content_type='text/markdown',
     author='Dmytro Smyk',
     author_email='porovozls@gmail.com',
     url='https://github.com/parikls/pyrogram-aiopg-storage',
