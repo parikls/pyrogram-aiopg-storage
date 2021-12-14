@@ -4,7 +4,7 @@ from setuptools import setup
 
 here = pathlib.Path(__file__).parent
 init = here / "pyrogram_aiopg_storage" / "__init__.py"
-readme_path = here / "README.rst"
+readme_path = here / "README.md"
 
 with init.open() as fp:
     try:
