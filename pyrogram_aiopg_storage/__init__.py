@@ -1,5 +1,5 @@
 __author__ = 'Dmytro Smyk'
-__version__ = '0.2'
+__version__ = '0.3'
 
 import time
 from enum import Enum
@@ -10,7 +10,7 @@ from typing import Any, List, Tuple, Dict, Optional
 from aiopg.sa import Engine, SAConnection
 from pyrogram import raw, utils
 from pyrogram.storage import Storage
-from sqlalchemy import MetaData, Table, Column, Integer, Boolean, String, BIGINT, Index, \
+from sqlalchemy import MetaData, Table, Column, Boolean, String, BIGINT, Index, \
     select, PrimaryKeyConstraint
 from sqlalchemy.dialects.postgresql import BYTEA, insert, dialect as psql_dialect
 from sqlalchemy.sql.ddl import CreateTable, CreateIndex, DropTable, DropIndex
@@ -96,11 +96,11 @@ class PostgreSQLStorage(Storage):
         self._t_session = Table(
             f'pyrogram_session_{self._session_id}', self._meta,
 
-            Column('dc_id', Integer, primary_key=True),
+            Column('dc_id', BIGINT, primary_key=True),
             Column('test_mode', Boolean),
             Column('auth_key', BYTEA),
-            Column('date', Integer, nullable=False),
-            Column('user_id', Integer),
+            Column('date', BIGINT, nullable=False),
+            Column('user_id', BIGINT),
             Column('is_bot', Boolean),
             Column('phone', String(length=50))
         )
@@ -113,7 +113,7 @@ class PostgreSQLStorage(Storage):
             Column('type', String, nullable=False),
             Column('username', String),
             Column('phone_number', String),
-            Column('last_update_on', Integer),
+            Column('last_update_on', BIGINT),
             PrimaryKeyConstraint('id', name=f'pk_peers_{self._session_id}')
         )
 
